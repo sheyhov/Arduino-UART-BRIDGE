@@ -1,7 +1,5 @@
 // отправка данных через uart на  mqtt. галка "Disable send name topic" снята
 
-String ver = "0.6"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
-
 #include <IRremote.h>
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
@@ -13,7 +11,7 @@ unsigned long loopTime;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 Adafruit_BMP085 bmp;
-#define interval 5000 // интервал отправки данных с датчиков
+#define interval 10000 // интервал отправки данных с датчиков
 #define readbufsize 100 // максимальный размер буфера 
  
 char *buf;
@@ -29,10 +27,7 @@ void setup()
   pinMode(A7, INPUT);
 Serial.begin(115200); // задаём скорость UART
    irrecv.enableIRIn(); // Start the receiver
-     if (!bmp.begin()) {
- Serial.println("kotel/bmp 0");
-  while (1) {}
-  }
+   !bmp.begin();
    buf = new char[readbufsize];
 }
 
@@ -63,10 +58,6 @@ unsigned long currentTime = millis();           // считываем время
   Serial.println(bmp.readTemperature());
   Serial.print("kotel/bmph ");
   Serial.println(bmp.readPressure() / 133.3);
-  Serial.print("kotel/bmpa ");
-  Serial.println(bmp.readAltitude());
-  Serial.print("kotel/bmpr ");
-  Serial.println(bmp.readAltitude(101500));
   Serial.print("kotel/REL1 ");
   Serial.println(digitalRead(REL1));
   Serial.print("kotel/outpin ");
