@@ -1,6 +1,6 @@
 // отправка данных через uart на  mqtt. галка "Disable send name topic" снята
 
-String ver = "0.5.3"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
+String ver = "0.5.4"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
 
 #include <IRremote.h>
 #include <Wire.h>
@@ -13,7 +13,7 @@ unsigned long loopTime;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 Adafruit_BMP085 bmp;
-#define interval 8000 // интервал отправки данных с датчиков
+#define interval 5000 // интервал отправки данных с датчиков
 #define readbufsize 100 // максимальный размер буфера 
  
 char *buf;
@@ -33,6 +33,8 @@ Serial.begin(115200); // задаём скорость UART
  Serial.println("kotel/bmp 0");
   while (1) {}
   }
+  Serial.print("kotel/ver ");
+  Serial.println(ver);
    buf = new char[readbufsize];
 }
 
@@ -50,8 +52,7 @@ unsigned long currentTime = millis();           // считываем время
   flame = map(flameOrig, 0, 1023, 1023, 0);
   rain = map(rainOrig, 0, 1023, 1023, 0);
  
-  Serial.print("kotel/ver ");
-  Serial.println(ver);
+
 /*
   Serial.print("kotel/uptime ");
   Serial.println(millis()/1000);//Пишет на странице время работы в минутах
