@@ -1,6 +1,6 @@
 // отправка данных через uart на  mqtt. галка "Disable send name topic" снята
 
-String ver = "0.5.1"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
+String ver = "0.5.2"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
 
 #include <IRremote.h>
 #include <Wire.h>
@@ -30,7 +30,7 @@ void setup()
 Serial.begin(115200); // задаём скорость UART
    irrecv.enableIRIn(); // Start the receiver
      if (!bmp.begin()) {
- Serial.println("kotelya/bmp 0");
+ Serial.println("kotel/bmp 0");
   while (1) {}
   }
    buf = new char[readbufsize];
@@ -49,33 +49,33 @@ unsigned long currentTime = millis();           // считываем время
   byte rain = 0;
   flame = map(flameOrig, 0, 1023, 1023, 0);
   rain = map(rainOrig, 0, 1023, 1023, 0);
-  Serial.print("kotelnya/gas ");
+  Serial.print("kotel/gas ");
   Serial.println(gas, DEC);
-  Serial.print("kotelnya/flame ");
+  Serial.print("kotel/flame ");
   Serial.println(flame, DEC);
-  Serial.print("kotelnya/rain ");
+  Serial.print("kotel/rain ");
   Serial.println(rain, DEC);
-  Serial.print("kotelnya/bmpt ");
+  Serial.print("kotel/bmpt ");
   Serial.println(bmp.readTemperature());
-  Serial.print("kotelnya/bmph ");
+  Serial.print("kotel/bmph ");
   Serial.println(bmp.readPressure() / 133.3);
-  Serial.print("kotelnya/bmpa ");
+  Serial.print("kotel/bmpa ");
   Serial.println(bmp.readAltitude());
-  Serial.print("kotelnya/bmpr ");
+  Serial.print("kotel/bmpr ");
   Serial.println(bmp.readAltitude(101500));
-  Serial.print("kotelnya/REL1 ");
+  Serial.print("kotel/REL1 ");
   Serial.println(digitalRead(REL1));
-  Serial.print("kotelnya/REL2 ");
+  Serial.print("kotel/REL2 ");
   Serial.println(digitalRead(REL2));
         // IR Reciver
         if (irrecv.decode(&results)) {
-          Serial.print("kotelnya/irrecv ");
+          Serial.print("kotel/irrecv ");
           Serial.println(results.value, HEX);
          irrecv.resume(); // Receive the next value
          }
-  Serial.print("kotelnya/ver ");
+  Serial.print("kotel/ver ");
   Serial.println(ver);
-  Serial.print("kotelnya/uptime ");
+  Serial.print("kotel/uptime ");
   Serial.println(millis()/1000);//Пишет на странице время работы в минутах
       loopTime = currentTime;
     }
@@ -91,10 +91,10 @@ int i = 0;
 char *pdata = NULL;
 char lwt[30];
 
-// пишем в топик email/kotelnya/gpioset 2 для установки 2 пина в единицу
+// пишем в топик email/kotel/gpioset 2 для установки 2 пина в единицу
 // не поддерживается mqtt flymon
 pdata = NULL;
-    sprintf(lwt,"kotelnya/gpioset ");
+    sprintf(lwt,"kotel/gpioset ");
         pdata = (char *)strstr(buf,lwt);
  
         if (pdata != NULL) {
@@ -103,10 +103,10 @@ uint8_t pin = atoi(pdata);
   digitalWrite(pin, HIGH);
      }
      
-// пишем в топик email/kotelnya/gpioclear 2 для установки 2 пина в ноль
+// пишем в топик email/kotel/gpioclear 2 для установки 2 пина в ноль
 // не поддерживается mqtt flymon
 pdata = NULL;
-    sprintf(lwt,"kotelnya/gpioclear ");
+    sprintf(lwt,"kotel/gpioclear ");
         pdata = (char *)strstr(buf,lwt);
  
         if (pdata != NULL) {
@@ -115,9 +115,9 @@ uint8_t pin = atoi(pdata);
  digitalWrite(pin, LOW); 
      }
  
- // пишем в топик email/kotelnya/gpio3 вкл/выкл REL1
+ // пишем в топик email/kotel/gpio3 вкл/выкл REL1
  pdata = NULL;
-    sprintf(lwt,"kotelnya/gpio3 ");
+    sprintf(lwt,"kotel/gpio3 ");
         pdata = (char *)strstr(buf,lwt);
  
         if (pdata != NULL) {
@@ -125,9 +125,9 @@ uint8_t pin = atoi(pdata);
 uint8_t pin = atoi(pdata);
  digitalWrite(REL1,pin); 
      }    
- // пишем в топик email/kotelnya/gpio2 вкл/выкл REL2
+ // пишем в топик email/kotel/gpio2 вкл/выкл REL2
  pdata = NULL;
-    sprintf(lwt,"kotelnya/gpio2 ");
+    sprintf(lwt,"kotel/gpio2 ");
         pdata = (char *)strstr(buf,lwt);
  
         if (pdata != NULL) {
