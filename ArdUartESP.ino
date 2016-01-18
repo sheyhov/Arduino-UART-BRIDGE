@@ -13,7 +13,7 @@ unsigned long loopTime;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 Adafruit_BMP085 bmp;
-#define interval 5000 // интервал отправки данных с датчиков
+#define interval 8000 // интервал отправки данных с датчиков
 #define readbufsize 100 // максимальный размер буфера 
  
 char *buf;
@@ -49,10 +49,13 @@ unsigned long currentTime = millis();           // считываем время
   byte rain = 0;
   flame = map(flameOrig, 0, 1023, 1023, 0);
   rain = map(rainOrig, 0, 1023, 1023, 0);
+ 
   Serial.print("kotel/ver ");
   Serial.println(ver);
+/*
   Serial.print("kotel/uptime ");
   Serial.println(millis()/1000);//Пишет на странице время работы в минутах
+*/  
   Serial.print("kotel/gas ");
   Serial.println(gas, DEC);
   Serial.print("kotel/flame ");
