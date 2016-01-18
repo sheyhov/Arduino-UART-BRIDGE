@@ -1,6 +1,6 @@
 // отправка данных через uart на  mqtt. галка "Disable send name topic" снята
 
-String ver = "0.5.2"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
+String ver = "0.5.3"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
 
 #include <IRremote.h>
 #include <Wire.h>
@@ -49,6 +49,10 @@ unsigned long currentTime = millis();           // считываем время
   byte rain = 0;
   flame = map(flameOrig, 0, 1023, 1023, 0);
   rain = map(rainOrig, 0, 1023, 1023, 0);
+  Serial.print("kotel/ver ");
+  Serial.println(ver);
+  Serial.print("kotel/uptime ");
+  Serial.println(millis()/1000);//Пишет на странице время работы в минутах
   Serial.print("kotel/gas ");
   Serial.println(gas, DEC);
   Serial.print("kotel/flame ");
@@ -73,10 +77,6 @@ unsigned long currentTime = millis();           // считываем время
           Serial.println(results.value, HEX);
          irrecv.resume(); // Receive the next value
          }
-  Serial.print("kotel/ver ");
-  Serial.println(ver);
-  Serial.print("kotel/uptime ");
-  Serial.println(millis()/1000);//Пишет на странице время работы в минутах
       loopTime = currentTime;
     }
  // прием команд с парсингом с вЫключенной опцией "Disable send name topic" в ESP
