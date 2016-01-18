@@ -1,6 +1,6 @@
 // отправка данных через uart на  mqtt. галка "Disable send name topic" снята
 
-String ver = "0.5.4"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
+String ver = "0.6"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕРСИИ
 
 #include <IRremote.h>
 #include <Wire.h>
@@ -9,7 +9,7 @@ String ver = "0.5.4"; // ЛЮБОЕ ИЗМЕНЕНИЕ ПОВЫШЕНИЕ ВЕР
 unsigned long loopTime;
 #define RECV_PIN 5
 #define REL1 3 // Реле 1
-#define REL2 2 // Реле 2
+#define outpin 2 // Реле 2
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 Adafruit_BMP085 bmp;
@@ -22,8 +22,8 @@ void setup()
 {
   pinMode(REL1, OUTPUT);
   digitalWrite(REL1, LOW);
-  pinMode(REL2, OUTPUT);
-  digitalWrite(REL2, LOW);
+  pinMode(outpin, OUTPUT);
+  digitalWrite(outpin, LOW);
   pinMode(A3, INPUT);
   pinMode(A6, INPUT);
   pinMode(A7, INPUT);
@@ -33,8 +33,6 @@ Serial.begin(115200); // задаём скорость UART
  Serial.println("kotel/bmp 0");
   while (1) {}
   }
-  Serial.print("kotel/ver ");
-  Serial.println(ver);
    buf = new char[readbufsize];
 }
 
@@ -51,9 +49,7 @@ unsigned long currentTime = millis();           // считываем время
   byte rain = 0;
   flame = map(flameOrig, 0, 1023, 1023, 0);
   rain = map(rainOrig, 0, 1023, 1023, 0);
- 
-
-/*
+ /*
   Serial.print("kotel/uptime ");
   Serial.println(millis()/1000);//Пишет на странице время работы в минутах
 */  
@@ -73,8 +69,8 @@ unsigned long currentTime = millis();           // считываем время
   Serial.println(bmp.readAltitude(101500));
   Serial.print("kotel/REL1 ");
   Serial.println(digitalRead(REL1));
-  Serial.print("kotel/REL2 ");
-  Serial.println(digitalRead(REL2));
+  Serial.print("kotel/outpin ");
+  Serial.println(digitalRead(outpin));
         // IR Reciver
         if (irrecv.decode(&results)) {
           Serial.print("kotel/irrecv ");
@@ -129,7 +125,7 @@ uint8_t pin = atoi(pdata);
 uint8_t pin = atoi(pdata);
  digitalWrite(REL1,pin); 
      }    
- // пишем в топик email/kotel/gpio2 вкл/выкл REL2
+ // пишем в топик email/kotel/gpio2 вкл/выкл outpin
  pdata = NULL;
     sprintf(lwt,"kotel/gpio2 ");
         pdata = (char *)strstr(buf,lwt);
@@ -137,7 +133,7 @@ uint8_t pin = atoi(pdata);
         if (pdata != NULL) {
         pdata+= strlen(lwt);
 uint8_t pin = atoi(pdata);
- digitalWrite(REL2,pin); 
+ digitalWrite(outpin,pin); 
      }
       
     memset(buf, 0, readbufsize);
